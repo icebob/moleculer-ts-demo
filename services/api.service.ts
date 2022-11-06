@@ -1,9 +1,12 @@
-import { Context, ServiceSchema } from "moleculer";
+import { Context, GenericObject, ServiceSchema } from "moleculer";
 
 import { IncomingMessage, ServerResponse } from "http";
 import type { ApiSettingsSchema, Route } from "moleculer-web";
 import ApiGateway from "moleculer-web";
-const { Errors, IncomingRequest, GatewayResponse } = ApiGateway;
+
+interface MetaUserAgent {
+	userAgent?: string | null | undefined;
+}
 
 const ApiService: ServiceSchema<ApiSettingsSchema> = {
     name: "api",
@@ -26,7 +29,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 
 				whitelist: [
 					"**"
-				],                
+				],
 
 				// Route-level Express middlewares. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Middlewares
 				use: [],
@@ -48,30 +51,32 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 
 				},
 
-				/** 
+				/**
 				 * Before call hook. You can check the request.
-				 * @param {Context} ctx 
-				 * @param {Object} route 
-				 * @param {IncomingRequest} req 
-				 * @param {ServerResponse} res 
+				 * @param {Context} ctx
+				 * @param {Object} route
+				 * @param {IncomingRequest} req
+				 * @param {ServerResponse} res
 				 * @param {Object} data
-				 */ 
-				onBeforeCall(ctx: Context, route: Route, req: IncomingMessage, res: ServerResponse): void {
+				 */
+				onBeforeCall(ctx: Context<unknown, MetaUserAgent>, route: Route, req: IncomingMessage, res: ServerResponse): void {
 					// Set request headers to context meta
 					ctx.meta.userAgent = req.headers["user-agent"];
 				},
 
 				/**
 				 * After call hook. You can modify the data.
-				 * @param {Context} ctx 
-				 * @param {Object} route 
-				 * @param {IncomingRequest} req 
-				 * @param {ServerResponse} res 
+				 * @param {Context} ctx
+				 * @param {Object} route
+				 * @param {IncomingRequest} req
+				 * @param {ServerResponse} res
 				 * @param {Object} data
-				onAfterCall(ctx, route, req, res, data) {
+				 */
+				onAfterCall(ctx: Context, route: Route, req: IncomingMessage, res: ServerResponse, data: any): any {
 					// Async function which return with Promise
-					return doSomething(ctx, res, data);
-				}, */
+					//return this.doSomething(ctx, res, data);
+					return data;
+				},
 
 				// Calling options. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Calling-options
 				callingOptions: {},
@@ -140,7 +145,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 
 				} else {
 					// Invalid token
-					throw new Errors.UnAuthorizedError(Errors.ERR_INVALID_TOKEN, null);
+					throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.ERR_INVALID_TOKEN, null);
 				}
 
 			} else {
@@ -166,7 +171,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 
 			// It check the `auth` property in action schema.
 			if (req.$action.auth == "required" && !user) {
-				throw new Errors.UnAuthorizedError("NO_RIGHTS", null);
+				throw new ApiGateway.Errors.UnAuthorizedError("NO_RIGHTS", null);
 			}
 		}
 

@@ -1,4 +1,4 @@
-import { Context, ServiceSchema } from "moleculer";
+import { Context, Service, ServiceSchema } from "moleculer";
 
 export type ActionHelloParams = {
     name: string;
@@ -8,7 +8,13 @@ export type GreeterSettings = {
     defaultName: string;
 }
 
-const GreeterService: ServiceSchema<GreeterSettings> = {
+type GreeterMethods = {
+	uppercase(str: string): string
+}
+
+type GreeterThis = Service<GreeterSettings> & GreeterMethods;
+
+const GreeterService: ServiceSchema<GreeterSettings> & { methods: GreeterMethods } = {
     name: "greeter",
 
 	/**
@@ -32,7 +38,7 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
 				method: "GET",
 				path: "/hello"
 			},
-            handler() {
+            handler(this: GreeterThis): string {
                 return `Hello ${this.settings.defaultName}`;
             }
         },
@@ -40,14 +46,15 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
         welcome: {
             rest: "GET /welcome/:name",
             params: {
-                name: "string"                
-            },            
-            handler(ctx: Context<ActionHelloParams>) {
-                return `Hello ${ctx.params.name}`;
+                name: "string"
+            },
+            handler(this: GreeterThis, ctx: Context<ActionHelloParams>): string {
+				const name: string = this.uppercase(ctx.params.name);
+                return `Hello ${name}`;
             }
         }
     },
-    
+
 	/**
 	 * Events
 	 */
@@ -59,7 +66,9 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
 	 * Methods
 	 */
 	methods: {
-
+		uppercase(str: string): string {
+			return str.toUpperCase();
+		}
 	},
 
 	/**
