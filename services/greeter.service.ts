@@ -12,7 +12,11 @@ type GreeterMethods = {
 	uppercase(str: string): string
 }
 
-type GreeterThis = Service<GreeterSettings> & GreeterMethods;
+type GreeterLocalVars = {
+	myVar: string
+}
+
+type GreeterThis = Service<GreeterSettings> & GreeterMethods & GreeterLocalVars;
 
 const GreeterService: ServiceSchema<GreeterSettings> & { methods: GreeterMethods } = {
     name: "greeter",
@@ -49,8 +53,8 @@ const GreeterService: ServiceSchema<GreeterSettings> & { methods: GreeterMethods
                 name: "string"
             },
             handler(this: GreeterThis, ctx: Context<ActionHelloParams>): string {
-				const name: string = this.uppercase(ctx.params.name);
-                return `Hello ${name}`;
+				const name = this.uppercase(ctx.params.name);
+                return `${this.myVar} ${name}`;
             }
         }
     },
@@ -74,8 +78,8 @@ const GreeterService: ServiceSchema<GreeterSettings> & { methods: GreeterMethods
 	/**
 	 * Service created lifecycle event handler
 	 */
-	created() {
-
+	created(this: GreeterThis) {
+		this.myVar = "string";
 	},
 
 	/**
