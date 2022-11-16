@@ -11,9 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "moleculer": "^0.14.25",
+    "moleculer": "^0.14.26",
     "moleculer-repl": "^0.7.3",
     "moleculer-web": "^0.10.4",
     "ts-node": "^10.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "typescript": "^4.9.3"
   }
 }
