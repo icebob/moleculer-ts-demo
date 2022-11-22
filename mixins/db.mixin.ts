@@ -5,7 +5,7 @@ import type { DbAdapter, MoleculerDB } from "moleculer-db";
 import DbService from "moleculer-db";
 import fs from "fs";
 
-type DbServiceMethods = {
+export type DbServiceMethods = {
 	seedDb?(): Promise<void>;
 }
 
@@ -13,9 +13,9 @@ type DbServiceSchema = Partial<ServiceSchema> & Partial<MoleculerDB<DbAdapter>> 
 	collection?: string;
 };
 
-type DbServiceThis = Service & DbServiceMethods;
+export type DbServiceThis = Service & DbServiceMethods;
 
-module.exports = function(collection: string): DbServiceSchema {
+export default function(collection: string): DbServiceSchema {
 	const cacheCleanEventName = `cache.clean.${collection}`;
 
 	const schema: DbServiceSchema = {

@@ -54,7 +54,7 @@ const GreeterService: ServiceSchema<GreeterSettings> & { methods: GreeterMethods
             },
             handler(this: GreeterThis, ctx: Context<ActionHelloParams>): string {
 				const name = this.uppercase(ctx.params.name);
-                return `${this.myVar} ${name}`;
+                return `Hello ${name}`;
             }
         }
     },
@@ -79,7 +79,7 @@ const GreeterService: ServiceSchema<GreeterSettings> & { methods: GreeterMethods
 	 * Service created lifecycle event handler
 	 */
 	created(this: GreeterThis) {
-		this.myVar = "string";
+
 	},
 
 	/**

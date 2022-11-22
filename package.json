@@ -13,8 +13,10 @@
   "dependencies": {
     "moleculer": "^0.14.26",
     "moleculer-db": "^0.8.20",
+    "moleculer-db-adapter-mongo": "^0.4.15",
     "moleculer-repl": "^0.7.3",
     "moleculer-web": "^0.10.4",
+    "mongodb": "^4.12.0",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {

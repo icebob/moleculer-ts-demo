@@ -1,12 +1,31 @@
 "use strict";
 
-const DbMixin = require("../mixins/db.mixin");
+import { Context, Service, ServiceSchema } from "moleculer";
+import type { DbServiceSettings, DbAdapter } from "moleculer-db";
+import type { DbServiceMethods } from "../mixins/db.mixin";
+import type { Collection } from "mongodb";
 
-/**
- * @typedef {import('moleculer').Context} Context Moleculer's Context
- */
+import DbMixin from "../mixins/db.mixin";
 
-module.exports = {
+export type ActionCreateParams = {
+    quantity?: number;
+};
+export type ActionQuantityParams = {
+    id: string;
+    value: number;
+};
+
+type ProductSettings = DbServiceSettings & {};
+
+interface MongoDbAdapter extends DbAdapter {
+	collection: Collection
+};
+
+type ProductsThis = Service<ProductSettings> & {
+	adapter: DbAdapter | MongoDbAdapter;
+};
+
+const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMethods } = {
 	name: "products",
 	// version: 1
 
@@ -42,10 +61,8 @@ module.exports = {
 			/**
 			 * Register a before hook for the `create` action.
 			 * It sets a default value for the quantity field.
-			 *
-			 * @param {Context} ctx
 			 */
-			create(ctx) {
+			create(ctx: Context<ActionCreateParams>) {
 				ctx.params.quantity = 0;
 			}
 		}
@@ -77,7 +94,7 @@ module.exports = {
 				id: "string",
 				value: "number|integer|positive"
 			},
-			async handler(ctx) {
+			async handler(this: ProductsThis, ctx: Context<ActionQuantityParams>): Promise<object> {
 				const doc = await this.adapter.updateById(ctx.params.id, { $inc: { quantity: ctx.params.value } });
 				const json = await this.transformDocuments(ctx, ctx.params, doc);
 				await this.entityChanged("updated", json, ctx);
@@ -95,8 +112,7 @@ module.exports = {
 				id: "string",
 				value: "number|integer|positive"
 			},
-			/** @param {Context} ctx  */
-			async handler(ctx) {
+			async handler(this: ProductsThis, ctx: Context<ActionQuantityParams>): Promise<object> {
 				const doc = await this.adapter.updateById(ctx.params.id, { $inc: { quantity: -ctx.params.value } });
 				const json = await this.transformDocuments(ctx, ctx.params, doc);
 				await this.entityChanged("updated", json, ctx);
@@ -115,7 +131,7 @@ module.exports = {
 		 * It is called in the DB.mixin after the database
 		 * connection establishing & the collection is empty.
 		 */
-		async seedDB() {
+		async seedDB(this: ProductsThis) {
 			await this.adapter.insertMany([
 				{ name: "Samsung Galaxy S10 Plus", quantity: 10, price: 704 },
 				{ name: "iPhone 11 Pro", quantity: 25, price: 999 },
@@ -127,7 +143,11 @@ module.exports = {
 	/**
 	 * Fired after database connection establishing.
 	 */
-	async afterConnected() {
-		// await this.adapter.collection.createIndex({ name: 1 });
+	async afterConnected(this: ProductsThis) {
+		if ("collection" in this.adapter) {
+			await (<MongoDbAdapter>this.adapter).collection.createIndex({ name: 1 });
+		}
 	}
 };
+
+export default ProductsService;
