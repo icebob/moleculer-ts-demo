@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "moleculer": "^0.14.26",
+    "moleculer-db": "^0.8.20",
     "moleculer-repl": "^0.7.3",
     "moleculer-web": "^0.10.4",
     "ts-node": "^10.9.1"
