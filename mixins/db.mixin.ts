@@ -1,7 +1,9 @@
 "use strict";
 
 import { Context, Service, ServiceSchema } from "moleculer";
-import type { DbAdapter, MoleculerDB } from "moleculer-db";
+import type { DbAdapter, MoleculerDB, MoleculerDbMethods } from "moleculer-db";
+import MongoDbAdapter from "moleculer-db-adapter-mongo";
+
 import DbService from "moleculer-db";
 import fs from "fs";
 
@@ -43,9 +45,14 @@ export default function(collection: string): DbServiceSchema {
 			 * @param {any} json
 			 * @param {Context} ctx
 			 */
-			async entityChanged(type: string, json: any, ctx: Context) {
+			async entityChanged(
+				type: string,
+				json: any,
+				ctx: Context
+			): Promise<void> {
 				ctx.broadcast(cacheCleanEventName);
-			}
+			},
+
 		},
 
 		async started(this: DbServiceThis) {
@@ -64,9 +71,7 @@ export default function(collection: string): DbServiceSchema {
 
 	if (process.env.MONGO_URI) {
 		// Mongo adapter
-		const MongoAdapter = require("moleculer-db-adapter-mongo");
-
-		schema.adapter = new MongoAdapter(process.env.MONGO_URI);
+		schema.adapter = new MongoDbAdapter(process.env.MONGO_URI);
 		schema.collection = collection;
 	} else if (process.env.NODE_ENV === 'test') {
 		// NeDB memory adapter for testing

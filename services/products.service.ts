@@ -1,9 +1,11 @@
 "use strict";
 
 import { Context, Service, ServiceSchema } from "moleculer";
-import type { DbServiceSettings, DbAdapter } from "moleculer-db";
+import type { DbServiceSettings, DbAdapter, MoleculerDbMethods } from "moleculer-db";
 import type { DbServiceMethods } from "../mixins/db.mixin";
 import type { Collection } from "mongodb";
+import type MongoDbAdapter from "moleculer-db-adapter-mongo";
+
 
 import DbMixin from "../mixins/db.mixin";
 
@@ -17,11 +19,7 @@ export type ActionQuantityParams = {
 
 type ProductSettings = DbServiceSettings & {};
 
-interface MongoDbAdapter extends DbAdapter {
-	collection: Collection
-};
-
-type ProductsThis = Service<ProductSettings> & {
+type ProductsThis = Service<ProductSettings> & MoleculerDbMethods & {
 	adapter: DbAdapter | MongoDbAdapter;
 };
 
