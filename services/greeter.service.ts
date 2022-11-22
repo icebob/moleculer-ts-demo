@@ -4,7 +4,7 @@ export type ActionHelloParams = {
     name: string;
 };
 
-export type GreeterSettings = {
+type GreeterSettings = {
     defaultName: string;
 }
 
@@ -18,7 +18,7 @@ type GreeterLocalVars = {
 
 type GreeterThis = Service<GreeterSettings> & GreeterMethods & GreeterLocalVars;
 
-const GreeterService: ServiceSchema<GreeterSettings> & { methods: GreeterMethods } = {
+const GreeterService: ServiceSchema<GreeterSettings> = {
     name: "greeter",
 
 	/**
@@ -42,8 +42,8 @@ const GreeterService: ServiceSchema<GreeterSettings> & { methods: GreeterMethods
 				method: "GET",
 				path: "/hello"
 			},
-            handler(this: GreeterThis): string {
-                return `Hello ${this.settings.defaultName}`;
+            async handler(this: GreeterThis, ctx: Context): Promise<string> {
+				return ctx.call("greeter.welcome", { name: this.settings.defaultName });
             }
         },
 
@@ -52,7 +52,7 @@ const GreeterService: ServiceSchema<GreeterSettings> & { methods: GreeterMethods
             params: {
                 name: "string"
             },
-            handler(this: GreeterThis, ctx: Context<ActionHelloParams>): string {
+            async handler(this: GreeterThis, ctx: Context<ActionHelloParams>): Promise<string> {
 				const name = this.uppercase(ctx.params.name);
                 return `Hello ${name}`;
             }

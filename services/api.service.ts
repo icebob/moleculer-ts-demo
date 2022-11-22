@@ -1,6 +1,5 @@
 import { Context, GenericObject, ServiceSchema } from "moleculer";
 
-import { ServerResponse } from "http";
 import type { ApiSettingsSchema, Route, IncomingRequest, GatewayResponse } from "moleculer-web";
 import ApiGateway from "moleculer-web";
 
@@ -57,10 +56,10 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 				 * @param {Context} ctx
 				 * @param {Object} route
 				 * @param {IncomingRequest} req
-				 * @param {ServerResponse} res
+				 * @param {GatewayResponse} res
 				 * @param {Object} data
 				 */
-				onBeforeCall(ctx: Context<unknown, Meta>, route: Route, req: IncomingRequest, res: ServerResponse): void {
+				onBeforeCall(ctx: Context<unknown, Meta>, route: Route, req: IncomingRequest, res: GatewayResponse): void {
 					// Set request headers to context meta
 					ctx.meta.userAgent = req.headers["user-agent"];
 				},
@@ -70,10 +69,10 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 				 * @param {Context} ctx
 				 * @param {Object} route
 				 * @param {IncomingRequest} req
-				 * @param {ServerResponse} res
+				 * @param {GatewayResponse} res
 				 * @param {Object} data
 				 */
-				onAfterCall(ctx: Context, route: Route, req: IncomingRequest, res: ServerResponse, data: object): object {
+				onAfterCall(ctx: Context, route: Route, req: IncomingRequest, res: GatewayResponse, data: object): object {
 					// Async function which return with Promise
 					//return this.doSomething(ctx, res, data);
 					return data;

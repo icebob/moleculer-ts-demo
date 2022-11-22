@@ -25,7 +25,7 @@ import {BrokerOptions, Errors, MetricRegistry, ServiceBroker} from "moleculer";
  *    }
  *  }
  */
-export default {
+const brokerConfig: BrokerOptions = {
 	// Namespace of nodes to segment your nodes on the same network.
 	namespace: "",
 	// Unique node identifier. Must be unique in a namespace.
@@ -210,3 +210,5 @@ export default {
 
 	}
 };
+
+export default brokerConfig;
