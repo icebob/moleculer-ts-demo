@@ -1,11 +1,12 @@
 import { Context, GenericObject, ServiceSchema } from "moleculer";
 
-import { IncomingMessage, ServerResponse } from "http";
-import type { ApiSettingsSchema, Route } from "moleculer-web";
+import { ServerResponse } from "http";
+import type { ApiSettingsSchema, Route, IncomingRequest, GatewayResponse } from "moleculer-web";
 import ApiGateway from "moleculer-web";
 
-interface MetaUserAgent {
+interface Meta {
 	userAgent?: string | null | undefined;
+	user?: object | null | undefined;
 }
 
 const ApiService: ServiceSchema<ApiSettingsSchema> = {
@@ -59,7 +60,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 				 * @param {ServerResponse} res
 				 * @param {Object} data
 				 */
-				onBeforeCall(ctx: Context<unknown, MetaUserAgent>, route: Route, req: IncomingMessage, res: ServerResponse): void {
+				onBeforeCall(ctx: Context<unknown, Meta>, route: Route, req: IncomingRequest, res: ServerResponse): void {
 					// Set request headers to context meta
 					ctx.meta.userAgent = req.headers["user-agent"];
 				},
@@ -72,7 +73,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 				 * @param {ServerResponse} res
 				 * @param {Object} data
 				 */
-				onAfterCall(ctx: Context, route: Route, req: IncomingMessage, res: ServerResponse, data: any): any {
+				onAfterCall(ctx: Context, route: Route, req: IncomingRequest, res: ServerResponse, data: object): object {
 					// Async function which return with Promise
 					//return this.doSomething(ctx, res, data);
 					return data;
@@ -131,7 +132,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		 * @param {IncomingRequest} req
 		 * @returns {Promise}
 		 */
-		async authenticate(ctx, route, req) {
+		async authenticate(ctx: Context, route: Route, req: IncomingRequest): Promise<Object | null> {
 			// Read the token from header
 			const auth = req.headers["authorization"];
 
@@ -165,7 +166,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		 * @param {IncomingRequest} req
 		 * @returns {Promise}
 		 */
-		async authorize(ctx, route, req) {
+		async authorize(ctx: Context<null, Meta>, route: Route, req: IncomingRequest) {
 			// Get the authenticated user.
 			const user = ctx.meta.user;
 
