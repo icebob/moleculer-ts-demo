@@ -333,7 +333,7 @@ declare namespace Moleculer {
 		static generateExponentialBuckets(
 			start: number,
 			factor: number,
-			count: number
+			count: number,
 		): Array<number>;
 	}
 
@@ -391,7 +391,7 @@ declare namespace Moleculer {
 			metric: BaseMetric,
 			value: any | null,
 			labels?: GenericObject,
-			timestamp?: number
+			timestamp?: number,
 		): void;
 
 		list(opts?: MetricListOptions): Array<BaseMetricPOJO>;
@@ -423,7 +423,7 @@ declare namespace Moleculer {
 			metric: BaseMetric,
 			value: any,
 			labels?: GenericObject,
-			timestamp?: number
+			timestamp?: number,
 		): void;
 	}
 
@@ -581,7 +581,7 @@ declare namespace Moleculer {
 
 		mcall<T>(
 			def: Record<string, MCallDefinition>,
-			opts?: MCallCallingOptions
+			opts?: MCallCallingOptions,
 		): Promise<Record<string, T>>;
 		mcall<T>(def: Array<MCallDefinition>, opts?: MCallCallingOptions): Promise<Array<T>>;
 
@@ -609,7 +609,7 @@ declare namespace Moleculer {
 			broker: ServiceBroker,
 			endpoint: Endpoint,
 			params: GenericObject,
-			opts: GenericObject
+			opts: GenericObject,
 		): Context;
 		static create(broker: ServiceBroker, endpoint: Endpoint, params: GenericObject): Context;
 		static create(broker: ServiceBroker, endpoint: Endpoint): Context;
@@ -629,7 +629,7 @@ declare namespace Moleculer {
 		payload: any,
 		sender: string,
 		eventName: string,
-		ctx: Context
+		ctx: Context,
 	) => void | Promise<void>;
 
 	type ServiceEventHandler = (ctx: Context) => void | Promise<void>;
@@ -653,7 +653,7 @@ declare namespace Moleculer {
 	type CallMiddlewareHandler = (
 		actionName: string,
 		params: any,
-		opts: CallingOptions
+		opts: CallingOptions,
 	) => Promise<any>;
 	type Middleware = {
 		[name: string]:
@@ -678,7 +678,7 @@ declare namespace Moleculer {
 		callHandlers(
 			method: string,
 			args: any[],
-			opts: MiddlewareCallHandlerOptions
+			opts: MiddlewareCallHandlerOptions,
 		): Promise<void>;
 		callSyncHandlers(method: string, args: any[], opts: MiddlewareCallHandlerOptions): void;
 		count(): number;
@@ -686,7 +686,7 @@ declare namespace Moleculer {
 			method: string,
 			handler: ActionHandler,
 			bindTo?: any,
-			opts?: MiddlewareCallHandlerOptions
+			opts?: MiddlewareCallHandlerOptions,
 		): typeof handler;
 	}
 
@@ -734,7 +734,7 @@ declare namespace Moleculer {
 
 	type ServiceAction = <T = Promise<any>, P extends GenericObject = GenericObject>(
 		params?: P,
-		opts?: CallingOptions
+		opts?: CallingOptions,
 	) => T;
 
 	interface ServiceActions {
@@ -775,7 +775,7 @@ declare namespace Moleculer {
 		 * @param params The event parameters
 		 * @param opts The event options
 		 */
-		emitLocalEventHandler(eventName: string, params?: any, opts?: any): any
+		emitLocalEventHandler(eventName: string, params?: any, opts?: any): any;
 
 		/**
 		 * Wait for the specified services to become available/registered with this broker.
@@ -786,9 +786,9 @@ declare namespace Moleculer {
 		 * @param interval The time we will wait before once again checking if the service(s) are available (In milliseconds)
 		 */
 		waitForServices(
-		  serviceNames: string | Array<string> | Array<ServiceDependency>,
-		  timeout?: number,
-		  interval?: number,
+			serviceNames: string | Array<string> | Array<ServiceDependency>,
+			timeout?: number,
+			interval?: number,
 		): Promise<WaitForServicesResult>;
 
 		[name: string]: any;
@@ -878,10 +878,7 @@ declare namespace Moleculer {
 		 * @param src Source schema property
 		 * @param target Target schema property
 		 */
-		mergeSchemaLifecycleHandlers(
-		  src: GenericObject,
-		  target: GenericObject
-		): GenericObject;
+		mergeSchemaLifecycleHandlers(src: GenericObject, target: GenericObject): GenericObject;
 
 		/**
 		 * Merge unknown properties in schema
@@ -897,7 +894,7 @@ declare namespace Moleculer {
 		 * @param name The name
 		 * @param version The version
 		 */
-		static getVersionedFullName(name: string, version?: string|number): string;
+		static getVersionedFullName(name: string, version?: string | number): string;
 	}
 
 	type CheckRetryable = (err: Errors.MoleculerError | Error) => boolean;
@@ -1201,12 +1198,12 @@ declare namespace Moleculer {
 			method: string,
 			handler: ActionHandler,
 			bindTo?: any,
-			opts?: MiddlewareCallHandlerOptions
+			opts?: MiddlewareCallHandlerOptions,
 		): typeof handler;
 		callMiddlewareHookSync(
 			name: string,
 			args: any[],
-			opts: MiddlewareCallHandlerOptions
+			opts: MiddlewareCallHandlerOptions,
 		): Promise<void>;
 		callMiddlewareHook(name: string, args: any[], opts: MiddlewareCallHandlerOptions): void;
 
@@ -1226,13 +1223,13 @@ declare namespace Moleculer {
 			serviceNames: string | Array<string> | Array<ServiceSearchObj>,
 			timeout?: number,
 			interval?: number,
-			logger?: LoggerInstance
+			logger?: LoggerInstance,
 		): Promise<void>;
 
 		findNextActionEndpoint(
 			actionName: string,
 			opts?: GenericObject,
-			ctx?: Context
+			ctx?: Context,
 		): ActionEndpoint | Errors.MoleculerRetryableError;
 
 		call<T>(actionName: string): Promise<T>;
@@ -1240,7 +1237,7 @@ declare namespace Moleculer {
 
 		mcall<T>(
 			def: Record<string, MCallDefinition>,
-			opts?: MCallCallingOptions
+			opts?: MCallCallingOptions,
 		): Promise<Record<string, T>>;
 		mcall<T>(def: Array<MCallDefinition>, opts?: MCallCallingOptions): Promise<Array<T>>;
 
@@ -1356,7 +1353,7 @@ declare namespace Moleculer {
 		init(
 			transit: Transit,
 			messageHandler: (cmd: string, msg: string) => void,
-			afterConnect: (wasReconnect: boolean) => void
+			afterConnect: (wasReconnect: boolean) => void,
 		): void;
 		connect(): Promise<any>;
 		disconnect(): Promise<any>;
@@ -1388,7 +1385,7 @@ declare namespace Moleculer {
 		actionName: string,
 		params: P,
 		meta: M,
-		keys?: string[]
+		keys?: string[],
 	) => string;
 	interface CacherOptions {
 		ttl?: number;
@@ -1429,13 +1426,13 @@ declare namespace Moleculer {
 				actionName: string,
 				params: object,
 				meta: object,
-				keys: Array<string> | null
+				keys: Array<string> | null,
 			): string;
 			defaultKeygen(
 				actionName: string,
 				params: object | null,
 				meta: object | null,
-				keys: Array<string> | null
+				keys: Array<string> | null,
 			): string;
 		}
 
@@ -1643,7 +1640,7 @@ declare namespace Moleculer {
 			extractPlainError(err: Error): PlainMoleculerError;
 			restoreCustomError(
 				plainError: PlainMoleculerError,
-				payload: GenericObject
+				payload: GenericObject,
 			): Error | undefined;
 		}
 	}

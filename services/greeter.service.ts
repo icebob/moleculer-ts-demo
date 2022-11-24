@@ -1,31 +1,31 @@
 import { Context, Service, ServiceSchema } from "moleculer";
 
 export type ActionHelloParams = {
-    name: string;
+	name: string;
 };
 
 type GreeterSettings = {
-    defaultName: string;
-}
+	defaultName: string;
+};
 
 type GreeterMethods = {
-	uppercase(str: string): string
-}
+	uppercase(str: string): string;
+};
 
 type GreeterLocalVars = {
-	myVar: string
-}
+	myVar: string;
+};
 
 type GreeterThis = Service<GreeterSettings> & GreeterMethods & GreeterLocalVars;
 
 const GreeterService: ServiceSchema<GreeterSettings> = {
-    name: "greeter",
+	name: "greeter",
 
 	/**
 	 * Settings
 	 */
-    settings: {
-        defaultName: "Moleculer"
+	settings: {
+		defaultName: "Moleculer",
 	},
 
 	/**
@@ -36,35 +36,33 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
 	/**
 	 * Actions
 	 */
-    actions: {
-        hello: {
-            rest: {
+	actions: {
+		hello: {
+			rest: {
 				method: "GET",
-				path: "/hello"
+				path: "/hello",
 			},
-            async handler(this: GreeterThis, ctx: Context): Promise<string> {
+			async handler(this: GreeterThis, ctx: Context): Promise<string> {
 				return ctx.call("greeter.welcome", { name: this.settings.defaultName });
-            }
-        },
+			},
+		},
 
-        welcome: {
-            rest: "GET /welcome/:name",
-            params: {
-                name: "string"
-            },
-            async handler(this: GreeterThis, ctx: Context<ActionHelloParams>): Promise<string> {
+		welcome: {
+			rest: "GET /welcome/:name",
+			params: {
+				name: "string",
+			},
+			async handler(this: GreeterThis, ctx: Context<ActionHelloParams>): Promise<string> {
 				const name = this.uppercase(ctx.params.name);
-                return `Hello ${name}`;
-            }
-        }
-    },
+				return `Hello ${name}`;
+			},
+		},
+	},
 
 	/**
 	 * Events
 	 */
-	events: {
-
-	},
+	events: {},
 
 	/**
 	 * Methods
@@ -72,29 +70,23 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
 	methods: {
 		uppercase(str: string): string {
 			return str.toUpperCase();
-		}
+		},
 	},
 
 	/**
 	 * Service created lifecycle event handler
 	 */
-	created(this: GreeterThis) {
-
-	},
+	created(this: GreeterThis) {},
 
 	/**
 	 * Service started lifecycle event handler
 	 */
-	async started() {
-
-	},
+	async started() {},
 
 	/**
 	 * Service stopped lifecycle event handler
 	 */
-	async stopped() {
-
-	}
+	async stopped() {},
 };
 
 export default GreeterService;

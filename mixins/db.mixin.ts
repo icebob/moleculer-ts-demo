@@ -9,15 +9,16 @@ import fs from "fs";
 
 export type DbServiceMethods = {
 	seedDb?(): Promise<void>;
-}
-
-type DbServiceSchema = Partial<ServiceSchema> & Partial<MoleculerDB<DbAdapter>> & {
-	collection?: string;
 };
+
+type DbServiceSchema = Partial<ServiceSchema> &
+	Partial<MoleculerDB<DbAdapter>> & {
+		collection?: string;
+	};
 
 export type DbServiceThis = Service & DbServiceMethods;
 
-export default function(collection: string): DbServiceSchema {
+export default function (collection: string): DbServiceSchema {
 	const cacheCleanEventName = `cache.clean.${collection}`;
 
 	const schema: DbServiceSchema = {
@@ -34,7 +35,7 @@ export default function(collection: string): DbServiceSchema {
 				if (this.broker.cacher) {
 					await this.broker.cacher.clean(`${this.fullName}.*`);
 				}
-			}
+			},
 		},
 
 		methods: {
@@ -45,14 +46,9 @@ export default function(collection: string): DbServiceSchema {
 			 * @param {any} json
 			 * @param {Context} ctx
 			 */
-			async entityChanged(
-				type: string,
-				json: any,
-				ctx: Context
-			): Promise<void> {
+			async entityChanged(type: string, json: any, ctx: Context): Promise<void> {
 				ctx.broadcast(cacheCleanEventName);
 			},
-
 		},
 
 		async started(this: DbServiceThis) {
@@ -61,19 +57,24 @@ export default function(collection: string): DbServiceSchema {
 			if (this.seedDB) {
 				const count = await this.adapter.count();
 				if (count == 0) {
-					this.logger.info(`The '${collection}' collection is empty. Seeding the collection...`);
+					this.logger.info(
+						`The '${collection}' collection is empty. Seeding the collection...`,
+					);
 					await this.seedDB();
-					this.logger.info("Seeding is done. Number of records:", await this.adapter.count());
+					this.logger.info(
+						"Seeding is done. Number of records:",
+						await this.adapter.count(),
+					);
 				}
 			}
-		}
+		},
 	};
 
 	if (process.env.MONGO_URI) {
 		// Mongo adapter
 		schema.adapter = new MongoDbAdapter(process.env.MONGO_URI);
 		schema.collection = collection;
-	} else if (process.env.NODE_ENV === 'test') {
+	} else if (process.env.NODE_ENV === "test") {
 		// NeDB memory adapter for testing
 		schema.adapter = new DbService.MemoryAdapter();
 	} else {
@@ -88,4 +89,4 @@ export default function(collection: string): DbServiceSchema {
 	}
 
 	return schema;
-};
+}

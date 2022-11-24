@@ -1,23 +1,24 @@
 declare module "moleculer-db" {
 	import { Context, ServiceBroker, Service } from "moleculer";
 
-	export interface QueryFilters extends FilterOptions{
-		sort?:string;
+	export interface QueryFilters extends FilterOptions {
+		sort?: string;
 	}
 
 	namespace Populate {
-		function HandlerFunctionRule(ids: any[], items: any[], rule: HandlerRule, ctx: Context): any
+		function HandlerFunctionRule(
+			ids: any[],
+			items: any[],
+			rule: HandlerRule,
+			ctx: Context,
+		): any;
 		type CommonRule = {
-			field?: string
-			params?: DbContextSanitizedParams
-		}
-		type ActionRule = CommonRule & { action: string }
-		type HandlerRule = CommonRule & { handler: typeof HandlerFunctionRule }
-		type Rule =
-			| string
-			| ActionRule
-			| HandlerRule
-			| typeof HandlerFunctionRule
+			field?: string;
+			params?: DbContextSanitizedParams;
+		};
+		type ActionRule = CommonRule & { action: string };
+		type HandlerRule = CommonRule & { handler: typeof HandlerFunctionRule };
+		type Rule = string | ActionRule | HandlerRule | typeof HandlerFunctionRule;
 	}
 	export interface DbServiceSettings {
 		/**
@@ -61,7 +62,7 @@ declare module "moleculer-db" {
 		entityValidator?: object | Function;
 	}
 
-	export interface QueryOptions{
+	export interface QueryOptions {
 		[name: string]: any;
 	}
 	export interface CursorOptions extends FilterOptions {
@@ -69,7 +70,7 @@ declare module "moleculer-db" {
 		fields?: string | string[];
 	}
 
-	export interface FilterOptions{
+	export interface FilterOptions {
 		limit?: string | number;
 		offset?: string | number;
 		searchFields?: string | string[];
@@ -191,10 +192,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @memberof DbAdapter
 		 */
-		updateMany< Q extends QueryOptions>(
-			query: Q,
-			update: object
-		): Promise<number>;
+		updateMany<Q extends QueryOptions>(query: Q, update: object): Promise<number>;
 
 		/**
 		 * Update an entity by ID
@@ -286,7 +284,7 @@ declare module "moleculer-db" {
 		populate?: string | string[];
 		searchFields?: string | string[];
 	}
-	export type DbContextSanitizedParams = DbContextParameters & { query?: QueryOptions }
+	export type DbContextSanitizedParams = DbContextParameters & { query?: QueryOptions };
 
 	export interface MoleculerDbMethods {
 		connect(): Promise<void>;
@@ -304,8 +302,8 @@ declare module "moleculer-db" {
 		sanitizeParams(
 			ctx: Context,
 			params?: DbContextParameters & {
-				query?: QueryOptions | any
-			}
+				query?: QueryOptions | any;
+			},
 		): DbContextSanitizedParams;
 
 		/**
@@ -316,10 +314,7 @@ declare module "moleculer-db" {
 		 * @param {Boolean} decoding - Need to decode IDs.
 		 * @returns {Object|Array<Object>} Found entity(ies).
 		 */
-		getById(
-			id: string | number | string[],
-			decoding?: boolean
-		): Promise<object | object[]>;
+		getById(id: string | number | string[], decoding?: boolean): Promise<object | object[]>;
 		/**
 		 * Clear the cache & call entity lifecycle events
 		 *
@@ -328,11 +323,7 @@ declare module "moleculer-db" {
 		 * @param {Context} ctx
 		 * @returns {Promise}
 		 */
-		entityChanged(
-			type: string,
-			json: number | any[] | any,
-			ctx: Context
-		): Promise<void>;
+		entityChanged(type: string, json: number | any[] | any, ctx: Context): Promise<void>;
 
 		/**
 		 * Clear cached entities
@@ -376,11 +367,7 @@ declare module "moleculer-db" {
 		 * @param {Array}			populateFields
 		 * @returns	{Promise}
 		 */
-		populateDocs(
-			ctx: Context,
-			docs: any,
-			populateFields: any[]
-		): Promise<any>;
+		populateDocs(ctx: Context, docs: any, populateFields: any[]): Promise<any>;
 
 		/**
 		 * Validate an entity by validator.
@@ -430,44 +417,52 @@ declare module "moleculer-db" {
 		 * List entities by filters and pagination results.
 		 * @methods
 		 */
-		_list(ctx: Context, params?: DbContextSanitizedParams): {
-			rows: object[],
-			total: number,
-			page: number,
-			pageSize: number,
-			totalPages: number
-		}
+		_list(
+			ctx: Context,
+			params?: DbContextSanitizedParams,
+		): {
+			rows: object[];
+			total: number;
+			page: number;
+			pageSize: number;
+			totalPages: number;
+		};
 		/**
 		 * Create a new entity.
 		 * @methods
 		 */
-		_create(ctx: Context, params: object): Promise<object>,
+		_create(ctx: Context, params: object): Promise<object>;
 
 		/**
 		 * Create many new entities.
 		 * @methods
 		 */
-		_insert(ctx: Context, params: object): Promise<object>
-		_insert(ctx: Context, params: object[]): Promise<object[]>
+		_insert(ctx: Context, params: object): Promise<object>;
+		_insert(ctx: Context, params: object[]): Promise<object[]>;
 
 		/**
 		 * Get entity by ID.
 		 * @methods
 		 */
-		_get(ctx: Context, params: { id: any | any[], mapping?: boolean } & Partial<Pick<DbContextParameters, "populate" | "fields">>): Promise<object| object[]>
+		_get(
+			ctx: Context,
+			params: { id: any | any[]; mapping?: boolean } & Partial<
+				Pick<DbContextParameters, "populate" | "fields">
+			>,
+		): Promise<object | object[]>;
 
 		/**
 		 * Update an entity by ID.
 		 * > After update, clear the cache & call lifecycle events.
 		 * @methods
 		 */
-		_update(ctx: Context, params: object): Promise<object>
+		_update(ctx: Context, params: object): Promise<object>;
 
 		/**
 		 * Remove an entity by ID.
 		 * @methods
 		 */
-		_remove(ctx: Context, params: {id: any}): Promise<object>
+		_remove(ctx: Context, params: { id: any }): Promise<object>;
 	}
 
 	export interface MoleculerDB<TAdapter extends DbAdapter> {
@@ -519,7 +514,7 @@ declare module "moleculer-db" {
 						| "searchFields"
 						| "query"
 						| any
-						>;
+					>;
 				};
 				params?: DbContextParameters & {
 					query?: any;
@@ -534,9 +529,8 @@ declare module "moleculer-db" {
 		methods?: Partial<MoleculerDbMethods>;
 	}
 
-	export class  MemoryAdapter {
-
-		constructor(opts?:object) ;
+	export class MemoryAdapter {
+		constructor(opts?: object);
 		/**
 		 * Initialize adapter
 		 *
@@ -552,7 +546,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		connect() :Promise<void>
+		connect(): Promise<void>;
 
 		/**
 		 * Disconnect from database
@@ -560,7 +554,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		disconnect() :Promise<void>
+		disconnect(): Promise<void>;
 
 		/**
 		 * Find all entities by filters.
@@ -577,7 +571,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		find(filters:QueryFilters):Promise<any>
+		find(filters: QueryFilters): Promise<any>;
 		/**
 		 * Find an entity by query
 		 *
@@ -585,7 +579,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		findOne(query:QueryOptions):Promise<object>
+		findOne(query: QueryOptions): Promise<object>;
 		/**
 		 * Find an entity by ID
 		 *
@@ -593,7 +587,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		findById(_id: number | string):Promise<object>
+		findById(_id: number | string): Promise<object>;
 		/**
 		 * Find all entites by IDs
 		 *
@@ -601,7 +595,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		findByIds(ids:number[]):Promise<object[]>
+		findByIds(ids: number[]): Promise<object[]>;
 		/**
 		 * Get count of filtered entites
 		 *
@@ -614,7 +608,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		count(filters:object):Promise<number>
+		count(filters: object): Promise<number>;
 		/**
 		 * Insert an entity
 		 *
@@ -622,7 +616,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		insert(entity:object):Promise<object>
+		insert(entity: object): Promise<object>;
 
 		/**
 		 * Insert multiple entities
@@ -631,7 +625,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		insertMany(entities:object[]):Promise<object[]>
+		insertMany(entities: object[]): Promise<object[]>;
 
 		/**
 		 * Update many entities by `query` and `update`
@@ -641,7 +635,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		updateMany(query:QueryOptions, update:object):Promise<object[]>
+		updateMany(query: QueryOptions, update: object): Promise<object[]>;
 
 		/**
 		 * Update an entity by ID
@@ -651,7 +645,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		updateById(_id: number | string , update:object):Promise<object>
+		updateById(_id: number | string, update: object): Promise<object>;
 
 		/**
 		 * Remove many entities which are matched by `query`
@@ -660,7 +654,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		removeMany(query:QueryOptions):Promise<object>
+		removeMany(query: QueryOptions): Promise<object>;
 
 		/**
 		 * Remove an entity by ID
@@ -669,7 +663,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		removeById(_id: number | string):Promise<object>
+		removeById(_id: number | string): Promise<object>;
 
 		/**
 		 * Clear all entities from DB
@@ -677,7 +671,7 @@ declare module "moleculer-db" {
 		 * @returns {Promise}
 		 * @typeOf MemoryDbAdapter
 		 */
-		clear():Promise<object>
+		clear(): Promise<object>;
 
 		/**
 		 * Convert DB entity to JSON object
@@ -686,7 +680,7 @@ declare module "moleculer-db" {
 		 * @returns {Object}
 		 * @typeOf MemoryDbAdapter
 		 */
-		entityToObject(entity:any):Promise<object>
+		entityToObject(entity: any): Promise<object>;
 
 		/**
 		 * Add filters to query
@@ -703,7 +697,7 @@ declare module "moleculer-db" {
 		 * @returns {Query}
 		 * @typeOf MemoryDbAdapter
 		 */
-		createCursor(params:QueryFilters):Promise<object[]> | QueryOptions
+		createCursor(params: QueryFilters): Promise<object[]> | QueryOptions;
 
 		/**
 		 * Transforms 'idField' into NeDB's '_id'
@@ -712,7 +706,7 @@ declare module "moleculer-db" {
 		 * @typeOf MemoryDbAdapter
 		 * @returns {Object} Modified entity
 		 */
-		beforeSaveTransformID (entity:object, idField:string):object
+		beforeSaveTransformID(entity: object, idField: string): object;
 
 		/**
 		 * Transforms NeDB's '_id' into user defined 'idField'
@@ -721,9 +715,11 @@ declare module "moleculer-db" {
 		 * @typeOf MemoryDbAdapter
 		 * @returns {Object} Modified entity
 		 */
-		afterRetrieveTransformID (entity:object, idField:string):object
+		afterRetrieveTransformID(entity: object, idField: string): object;
 	}
-	export default class DbService<S extends DbServiceSettings = DbServiceSettings> extends Service<S> {
+	export default class DbService<
+		S extends DbServiceSettings = DbServiceSettings,
+	> extends Service<S> {
 		static MemoryAdapter: MemoryDbAdapter;
 	}
 }

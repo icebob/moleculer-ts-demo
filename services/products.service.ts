@@ -6,22 +6,22 @@ import type { DbServiceMethods } from "../mixins/db.mixin";
 import type { Collection } from "mongodb";
 import type MongoDbAdapter from "moleculer-db-adapter-mongo";
 
-
 import DbMixin from "../mixins/db.mixin";
 
 export type ActionCreateParams = {
-    quantity?: number;
+	quantity?: number;
 };
 export type ActionQuantityParams = {
-    id: string;
-    value: number;
+	id: string;
+	value: number;
 };
 
 type ProductSettings = DbServiceSettings & {};
 
-type ProductsThis = Service<ProductSettings> & MoleculerDbMethods & {
-	adapter: DbAdapter | MongoDbAdapter;
-};
+type ProductsThis = Service<ProductSettings> &
+	MoleculerDbMethods & {
+		adapter: DbAdapter | MongoDbAdapter;
+	};
 
 const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMethods } = {
 	name: "products",
@@ -37,18 +37,13 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 	 */
 	settings: {
 		// Available fields in the responses
-		fields: [
-			"_id",
-			"name",
-			"quantity",
-			"price"
-		],
+		fields: ["_id", "name", "quantity", "price"],
 
 		// Validator for the `create` & `insert` actions.
 		entityValidator: {
 			name: "string|min:3",
-			price: "number|positive"
-		}
+			price: "number|positive",
+		},
 	},
 
 	/**
@@ -62,8 +57,8 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 			 */
 			create(ctx: Context<ActionCreateParams>) {
 				ctx.params.quantity = 0;
-			}
-		}
+			},
+		},
 	},
 
 	/**
@@ -90,15 +85,17 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 			rest: "PUT /:id/quantity/increase",
 			params: {
 				id: "string",
-				value: "number|integer|positive"
+				value: "number|integer|positive",
 			},
 			async handler(this: ProductsThis, ctx: Context<ActionQuantityParams>): Promise<object> {
-				const doc = await this.adapter.updateById(ctx.params.id, { $inc: { quantity: ctx.params.value } });
+				const doc = await this.adapter.updateById(ctx.params.id, {
+					$inc: { quantity: ctx.params.value },
+				});
 				const json = await this.transformDocuments(ctx, ctx.params, doc);
 				await this.entityChanged("updated", json, ctx);
 
 				return json;
-			}
+			},
 		},
 
 		/**
@@ -108,16 +105,18 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 			rest: "PUT /:id/quantity/decrease",
 			params: {
 				id: "string",
-				value: "number|integer|positive"
+				value: "number|integer|positive",
 			},
 			async handler(this: ProductsThis, ctx: Context<ActionQuantityParams>): Promise<object> {
-				const doc = await this.adapter.updateById(ctx.params.id, { $inc: { quantity: -ctx.params.value } });
+				const doc = await this.adapter.updateById(ctx.params.id, {
+					$inc: { quantity: -ctx.params.value },
+				});
 				const json = await this.transformDocuments(ctx, ctx.params, doc);
 				await this.entityChanged("updated", json, ctx);
 
 				return json;
-			}
-		}
+			},
+		},
 	},
 
 	/**
@@ -135,7 +134,7 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 				{ name: "iPhone 11 Pro", quantity: 25, price: 999 },
 				{ name: "Huawei P30 Pro", quantity: 15, price: 679 },
 			]);
-		}
+		},
 	},
 
 	/**
@@ -145,7 +144,7 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 		if ("collection" in this.adapter) {
 			await (<MongoDbAdapter>this.adapter).collection.createIndex({ name: 1 });
 		}
-	}
+	},
 };
 
 export default ProductsService;
