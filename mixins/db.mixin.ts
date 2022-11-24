@@ -1,11 +1,11 @@
-"use strict";
 
-import { Context, Service, ServiceSchema } from "moleculer";
+
+import fs from "fs";
+import type { Context, Service, ServiceSchema } from "moleculer";
 import type { DbAdapter, MoleculerDB, MoleculerDbMethods } from "moleculer-db";
+import DbService from "moleculer-db";
 import MongoDbAdapter from "moleculer-db-adapter-mongo";
 
-import DbService from "moleculer-db";
-import fs from "fs";
 
 export type DbServiceMethods = {
 	seedDb?(): Promise<void>;

@@ -1,4 +1,4 @@
-import { Context, Service, ServiceSchema } from "moleculer";
+import type { Context, Service, ServiceSchema } from "moleculer";
 
 export type ActionHelloParams = {
 	name: string;

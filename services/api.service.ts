@@ -1,6 +1,6 @@
-import { Context, GenericObject, ServiceSchema } from "moleculer";
-
-import type { ApiSettingsSchema, Route, IncomingRequest, GatewayResponse } from "moleculer-web";
+import type { Context, ServiceSchema } from "moleculer";
+import { GenericObject } from "moleculer";
+import type { ApiSettingsSchema, GatewayResponse, IncomingRequest, Route } from "moleculer-web";
 import ApiGateway from "moleculer-web";
 
 interface Meta {
@@ -81,7 +81,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 					data: object,
 				): object {
 					// Async function which return with Promise
-					//return this.doSomething(ctx, res, data);
+					// return this.doSomething(ctx, res, data);
 					return data;
 				},
 
@@ -142,7 +142,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 			req: IncomingRequest,
 		): Promise<Object | null> {
 			// Read the token from header
-			const auth = req.headers["authorization"];
+			const auth = req.headers.authorization;
 
 			if (auth && auth.startsWith("Bearer")) {
 				const token = auth.slice(7);
@@ -151,13 +151,13 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 				if (token == "123456") {
 					// Returns the resolved user. It will be set to the `ctx.meta.user`
 					return { id: 1, name: "John Doe" };
-				} else {
+				} 
 					// Invalid token
 					throw new ApiGateway.Errors.UnAuthorizedError(
 						ApiGateway.Errors.ERR_INVALID_TOKEN,
 						null,
 					);
-				}
+				
 			} else {
 				// No token. Throw an error or do nothing if anonymous access is allowed.
 				// throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
@@ -177,7 +177,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		 */
 		async authorize(ctx: Context<null, Meta>, route: Route, req: IncomingRequest) {
 			// Get the authenticated user.
-			const user = ctx.meta.user;
+			const {user} = ctx.meta;
 
 			// It check the `auth` property in action schema.
 			if (req.$action.auth == "required" && !user) {
