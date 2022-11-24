@@ -10,6 +10,10 @@
   "arrowParens": "always",
   "overrides": [
     {
+      "files": ["*.html"],
+      "options": { "parser": "vue" }
+    },
+    {
       "files": ["*.{cjs,mjs,js,jsx,ts,tsx,d.ts,css,html,graphql}"],
       "options": { "useTabs": true }
     },
