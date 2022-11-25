@@ -1,7 +1,6 @@
 import type { Context, Service, ServiceSchema } from "moleculer";
 import type { DbAdapter, DbServiceSettings, MoleculerDbMethods } from "moleculer-db";
 import type MongoDbAdapter from "moleculer-db-adapter-mongo";
-import type { Collection } from "mongodb";
 import type { DbServiceMethods } from "../mixins/db.mixin";
 import DbMixin from "../mixins/db.mixin";
 
@@ -13,7 +12,9 @@ export type ActionQuantityParams = {
 	value: number;
 };
 
-type ProductSettings = DbServiceSettings & {};
+type ProductSettings = DbServiceSettings & {
+	indexes?: Record<string, number>[];
+};
 
 type ProductsThis = Service<ProductSettings> &
 	MoleculerDbMethods & {
@@ -41,6 +42,8 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 			name: "string|min:3",
 			price: "number|positive",
 		},
+
+		indexes: [{ name: 1 }],
 	},
 
 	/**
@@ -139,7 +142,13 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 	 */
 	async afterConnected(this: ProductsThis) {
 		if ("collection" in this.adapter) {
-			await this.adapter.collection.createIndex({ name: 1 });
+			if (this.settings.indexes) {
+				await Promise.all(
+					this.settings.indexes.map((index) =>
+						(<MongoDbAdapter>this.adapter).collection.createIndex(index),
+					),
+				);
+			}
 		}
 	},
 };

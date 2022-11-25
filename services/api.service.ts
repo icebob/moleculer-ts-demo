@@ -53,7 +53,6 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 				 * @param {Object} route
 				 * @param {IncomingRequest} req
 				 * @param {GatewayResponse} res
-				 * @param {Object} data
 				 */
 				onBeforeCall(
 					ctx: Context<unknown, Meta>,
@@ -136,7 +135,11 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		 * @param {IncomingRequest} req
 		 * @returns {Promise}
 		 */
-		authenticate(ctx: Context, route: Route, req: IncomingRequest): Object | null {
+		authenticate(
+			ctx: Context,
+			route: Route,
+			req: IncomingRequest,
+		): Record<string, unknown> | null {
 			// Read the token from header
 			const auth = req.headers.authorization;
 

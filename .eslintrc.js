@@ -133,7 +133,7 @@ module.exports = {
 		// ensure unused variables are treated as an error
 		// overrides @typescript-eslint/recommended -- '@typescript-eslint/no-unused-vars': 'warn'
 		// https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/recommended.ts
-		"@typescript-eslint/no-unused-vars": "error",
+		"@typescript-eslint/no-unused-vars": "warn",
 	},
 
 	overrides: [
@@ -236,7 +236,7 @@ module.exports = {
 				"@typescript-eslint/no-non-null-assertion": "off",
 
 				// allow empty arrow functions
-				"@typescript-eslint/no-empty-function": ["error", { allow: ["arrowFunctions"] }],
+				"@typescript-eslint/no-empty-function": ["warn", { allow: ["arrowFunctions"] }],
 			},
 		},
 
