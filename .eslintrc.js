@@ -112,6 +112,12 @@ module.exports = {
 				filter: { regex: "^(_id|__v)$", match: true },
 				format: null,
 			},
+			{
+				// variables ending in Service should be PascalCase
+				selector: "variable",
+				filter: { regex: "^.*Service$", match: true },
+				format: ["PascalCase"],
+			},
 			// do not enforce format on property names
 			{ selector: "property", format: null },
 			// PascalCase for classes and TypeScript keywords
