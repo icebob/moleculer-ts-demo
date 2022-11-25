@@ -156,6 +156,9 @@ module.exports = {
 
 				// enforce return types on module boundaries
 				"@typescript-eslint/explicit-module-boundary-types": "error",
+
+				// allow empty functions
+				"@typescript-eslint/no-empty-function": "off",
 			},
 		},
 

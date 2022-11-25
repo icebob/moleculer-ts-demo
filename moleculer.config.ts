@@ -198,13 +198,13 @@ const brokerConfig: BrokerOptions = {
 	replCommands: null,
 
 	// Called after broker created.
-	created(broker: ServiceBroker): void {},
+	// created(broker: ServiceBroker): void {},
 
 	// Called after broker started.
-	async started(broker: ServiceBroker): Promise<void> {},
+	// async started(broker: ServiceBroker): Promise<void> {},
 
 	// Called after broker stopped.
-	async stopped(broker: ServiceBroker): Promise<void> {},
+	// async stopped(broker: ServiceBroker): Promise<void> {},
 };
 
 export default brokerConfig;
