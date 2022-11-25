@@ -64,3 +64,6 @@ dist/
 
 # JetBrains IDE
 .idea
+
+# DB folder
+# data/
