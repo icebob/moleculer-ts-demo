@@ -52,7 +52,7 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
 			params: {
 				name: "string",
 			},
-			async handler(this: GreeterThis, ctx: Context<ActionHelloParams>): Promise<string> {
+			handler(this: GreeterThis, ctx: Context<ActionHelloParams>): string {
 				const name = this.uppercase(ctx.params.name);
 				return `Hello ${name}`;
 			},

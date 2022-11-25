@@ -136,11 +136,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		 * @param {IncomingRequest} req
 		 * @returns {Promise}
 		 */
-		async authenticate(
-			ctx: Context,
-			route: Route,
-			req: IncomingRequest,
-		): Promise<Object | null> {
+		authenticate(ctx: Context, route: Route, req: IncomingRequest): Object | null {
 			// Read the token from header
 			const auth = req.headers.authorization;
 
@@ -148,16 +144,15 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 				const token = auth.slice(7);
 
 				// Check the token. Tip: call a service which verify the token. E.g. `accounts.resolveToken`
-				if (token == "123456") {
+				if (token === "123456") {
 					// Returns the resolved user. It will be set to the `ctx.meta.user`
 					return { id: 1, name: "John Doe" };
-				} 
-					// Invalid token
-					throw new ApiGateway.Errors.UnAuthorizedError(
-						ApiGateway.Errors.ERR_INVALID_TOKEN,
-						null,
-					);
-				
+				}
+				// Invalid token
+				throw new ApiGateway.Errors.UnAuthorizedError(
+					ApiGateway.Errors.ERR_INVALID_TOKEN,
+					null,
+				);
 			} else {
 				// No token. Throw an error or do nothing if anonymous access is allowed.
 				// throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
@@ -175,12 +170,12 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		 * @param {IncomingRequest} req
 		 * @returns {Promise}
 		 */
-		async authorize(ctx: Context<null, Meta>, route: Route, req: IncomingRequest) {
+		authorize(ctx: Context<null, Meta>, route: Route, req: IncomingRequest) {
 			// Get the authenticated user.
-			const {user} = ctx.meta;
+			const { user } = ctx.meta;
 
 			// It check the `auth` property in action schema.
-			if (req.$action.auth == "required" && !user) {
+			if (req.$action.auth === "required" && !user) {
 				throw new ApiGateway.Errors.UnAuthorizedError("NO_RIGHTS", null);
 			}
 		},

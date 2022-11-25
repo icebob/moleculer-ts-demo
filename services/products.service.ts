@@ -1,5 +1,3 @@
-
-
 import type { Context, Service, ServiceSchema } from "moleculer";
 import type { DbAdapter, DbServiceSettings, MoleculerDbMethods } from "moleculer-db";
 import type MongoDbAdapter from "moleculer-db-adapter-mongo";
@@ -141,7 +139,7 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 	 */
 	async afterConnected(this: ProductsThis) {
 		if ("collection" in this.adapter) {
-			await (this.adapter).collection.createIndex({ name: 1 });
+			await this.adapter.collection.createIndex({ name: 1 });
 		}
 	},
 };
