@@ -66,4 +66,4 @@ dist/
 .idea
 
 # DB folder
-# data/
+data/
