@@ -1,5 +1,4 @@
 import type { Context, ServiceSchema } from "moleculer";
-import { GenericObject } from "moleculer";
 import type { ApiSettingsSchema, GatewayResponse, IncomingRequest, Route } from "moleculer-web";
 import ApiGateway from "moleculer-web";
 
@@ -49,10 +48,6 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 
 				/**
 				 * Before call hook. You can check the request.
-				 * @param {Context} ctx
-				 * @param {Object} route
-				 * @param {IncomingRequest} req
-				 * @param {GatewayResponse} res
 				 */
 				onBeforeCall(
 					ctx: Context<unknown, Meta>,
@@ -66,19 +61,14 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 
 				/**
 				 * After call hook. You can modify the data.
-				 * @param {Context} ctx
-				 * @param {Object} route
-				 * @param {IncomingRequest} req
-				 * @param {GatewayResponse} res
-				 * @param {Object} data
 				 */
 				onAfterCall(
 					ctx: Context,
 					route: Route,
 					req: IncomingRequest,
 					res: GatewayResponse,
-					data: object,
-				): object {
+					data: unknown,
+				): unknown {
 					// Async function which return with Promise
 					// return this.doSomething(ctx, res, data);
 					return data;
@@ -129,11 +119,6 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		 * The resolved user will be available in `ctx.meta.user`
 		 *
 		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
-		 *
-		 * @param {Context} ctx
-		 * @param {Object} route
-		 * @param {IncomingRequest} req
-		 * @returns {Promise}
 		 */
 		authenticate(
 			ctx: Context,
@@ -167,11 +152,6 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		 * Authorize the request. Check that the authenticated user has right to access the resource.
 		 *
 		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
-		 *
-		 * @param {Context} ctx
-		 * @param {Object} route
-		 * @param {IncomingRequest} req
-		 * @returns {Promise}
 		 */
 		authorize(ctx: Context<null, Meta>, route: Route, req: IncomingRequest) {
 			// Get the authenticated user.

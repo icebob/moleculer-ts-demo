@@ -1,6 +1,6 @@
 import fs from "fs";
 import type { Context, Service, ServiceSchema } from "moleculer";
-import type { DbAdapter, MoleculerDB, MoleculerDbMethods } from "moleculer-db";
+import type { DbAdapter, MoleculerDB } from "moleculer-db";
 import DbService from "moleculer-db";
 import MongoDbAdapter from "moleculer-db-adapter-mongo";
 
@@ -15,7 +15,7 @@ type DbServiceSchema = Partial<ServiceSchema> &
 
 export type DbServiceThis = Service & DbServiceMethods;
 
-export default function (collection: string): DbServiceSchema {
+export default function createDbServiceMixin(collection: string): DbServiceSchema {
 	const cacheCleanEventName = `cache.clean.${collection}`;
 
 	const schema: DbServiceSchema = {
@@ -25,8 +25,6 @@ export default function (collection: string): DbServiceSchema {
 			/**
 			 * Subscribe to the cache clean event. If it's triggered
 			 * clean the cache entries for this service.
-			 *
-			 * @param {Context} ctx
 			 */
 			async [cacheCleanEventName](this: DbServiceThis) {
 				if (this.broker.cacher) {
@@ -38,12 +36,8 @@ export default function (collection: string): DbServiceSchema {
 		methods: {
 			/**
 			 * Send a cache clearing event when an entity changed.
-			 *
-			 * @param {String} type
-			 * @param {any} json
-			 * @param {Context} ctx
 			 */
-			async entityChanged(type: string, json: any, ctx: Context): Promise<void> {
+			async entityChanged(type: string, json: unknown, ctx: Context): Promise<void> {
 				await ctx.broadcast(cacheCleanEventName);
 			},
 		},
