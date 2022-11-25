@@ -1,4 +1,5 @@
-import { BrokerOptions, Errors, MetricRegistry, ServiceBroker } from "moleculer";
+import type { BrokerOptions, MetricRegistry, ServiceBroker } from "moleculer";
+import { Errors } from "moleculer";
 
 /**
  * Moleculer ServiceBroker configuration file
@@ -58,7 +59,7 @@ const brokerConfig: BrokerOptions = {
 	// More info: https://moleculer.services/docs/0.14/networking.html
 	// Note: During the development, you don't need to define it because all services will be loaded locally.
 	// In production you can set it via `TRANSPORTER=nats://localhost:4222` environment variable.
-	transporter: null, //"NATS"
+	transporter: null, // "NATS"
 
 	// Define a cacher.
 	// More info: https://moleculer.services/docs/0.14/caching.html
@@ -197,13 +198,13 @@ const brokerConfig: BrokerOptions = {
 	replCommands: null,
 
 	// Called after broker created.
-	created(broker: ServiceBroker): void {},
+	// created(broker: ServiceBroker): void {},
 
 	// Called after broker started.
-	async started(broker: ServiceBroker): Promise<void> {},
+	// async started(broker: ServiceBroker): Promise<void> {},
 
 	// Called after broker stopped.
-	async stopped(broker: ServiceBroker): Promise<void> {},
+	// async stopped(broker: ServiceBroker): Promise<void> {},
 };
 
 export default brokerConfig;
