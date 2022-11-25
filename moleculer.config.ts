@@ -1,4 +1,4 @@
-import {BrokerOptions, Errors, MetricRegistry, ServiceBroker} from "moleculer";
+import { BrokerOptions, Errors, MetricRegistry, ServiceBroker } from "moleculer";
 
 /**
  * Moleculer ServiceBroker configuration file
@@ -47,8 +47,8 @@ const brokerConfig: BrokerOptions = {
 			// Custom object printer. If not defined, it uses the `util.inspect` method.
 			objectPrinter: null,
 			// Auto-padding the module name in order to messages begin at the same column.
-			autoPadding: false
-		}
+			autoPadding: false,
+		},
 	},
 	// Default log level for built-in console logger. It can be overwritten in logger options above.
 	// Available values: trace, debug, info, warn, error, fatal
@@ -85,7 +85,8 @@ const brokerConfig: BrokerOptions = {
 		// Backoff factor for delay. 2 means exponential backoff.
 		factor: 2,
 		// A function to check failed requests.
-		check: (err: Error) => err && err instanceof Errors.MoleculerRetryableError && !!err.retryable,
+		check: (err: Error) =>
+			err && err instanceof Errors.MoleculerRetryableError && !!err.retryable,
 	},
 
 	// Limit of calling level. If it reaches the limit, broker will throw an MaxCallLevelError error. (Infinite loop protection)
@@ -116,7 +117,7 @@ const brokerConfig: BrokerOptions = {
 		// Available values: "RoundRobin", "Random", "CpuUsage", "Latency", "Shard"
 		strategy: "RoundRobin",
 		// Enable local action call preferring. Always call the local action instance if available.
-		preferLocal: true
+		preferLocal: true,
 	},
 
 	// Settings of Circuit Breaker. More info: https://moleculer.services/docs/0.14/fault-tolerance.html#Circuit-Breaker
@@ -132,7 +133,7 @@ const brokerConfig: BrokerOptions = {
 		// Number of milliseconds to switch from open to half-open state
 		halfOpenTime: 10 * 1000,
 		// A function to check failed requests.
-		check: (err: Error) => err && err instanceof Errors.MoleculerError && err.code >= 500
+		check: (err: Error) => err && err instanceof Errors.MoleculerError && err.code >= 500,
 	},
 
 	// Settings of bulkhead feature. More info: https://moleculer.services/docs/0.14/fault-tolerance.html#Bulkhead
@@ -164,10 +165,10 @@ const brokerConfig: BrokerOptions = {
 				// Default labels which are appended to all metrics labels
 				defaultLabels: (registry: MetricRegistry) => ({
 					namespace: registry.broker.namespace,
-					nodeID: registry.broker.nodeID
-				})
-			}
-		}
+					nodeID: registry.broker.nodeID,
+				}),
+			},
+		},
 	},
 
 	// Enable built-in tracing function. More info: https://moleculer.services/docs/0.14/tracing.html
@@ -184,9 +185,9 @@ const brokerConfig: BrokerOptions = {
 				// Width of row
 				width: 100,
 				// Gauge width in the row
-				gaugeWidth: 40
-			}
-		}
+				gaugeWidth: 40,
+			},
+		},
 	},
 
 	// Register custom middlewares
@@ -196,19 +197,13 @@ const brokerConfig: BrokerOptions = {
 	replCommands: null,
 
 	// Called after broker created.
-	created(broker: ServiceBroker): void {
-
-	},
+	created(broker: ServiceBroker): void {},
 
 	// Called after broker started.
-	async started(broker: ServiceBroker): Promise<void> {
-
-	},
+	async started(broker: ServiceBroker): Promise<void> {},
 
 	// Called after broker stopped.
-	async stopped(broker: ServiceBroker): Promise<void> {
-
-	}
+	async stopped(broker: ServiceBroker): Promise<void> {},
 };
 
 export default brokerConfig;

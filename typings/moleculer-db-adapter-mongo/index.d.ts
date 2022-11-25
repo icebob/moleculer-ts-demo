@@ -113,10 +113,7 @@ declare module "moleculer-db-adapter-mongo" {
 		 * @returns {Promise}
 		 * @memberof DbAdapter
 		 */
-		updateMany<Q extends QueryOptions>(
-			query: Q,
-			update: object
-		): Promise<number>;
+		updateMany<Q extends QueryOptions>(query: Q, update: object): Promise<number>;
 
 		/**
 		 * Update an entity by ID

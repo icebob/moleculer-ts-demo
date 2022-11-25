@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc --build tsconfig.json",
-    "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --config moleculer.config.ts --hot --repl services/**/*.service.ts"
+    "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --config moleculer.config.ts --hot --repl services/**/*.service.ts",
+    "prettier": "prettier . --ignore-unknown --check",
+    "prettier:fix": "prettier . --ignore-unknown --write",
+    "test": "concurrently npm:prettier"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +24,8 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.9",
+    "concurrently": "^7.6.0",
+    "prettier": "^2.8.0",
     "typescript": "^4.9.3"
   }
 }
