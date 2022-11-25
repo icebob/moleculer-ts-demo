@@ -1,11 +1,8 @@
-
-
 import fs from "fs";
 import type { Context, Service, ServiceSchema } from "moleculer";
 import type { DbAdapter, MoleculerDB, MoleculerDbMethods } from "moleculer-db";
 import DbService from "moleculer-db";
 import MongoDbAdapter from "moleculer-db-adapter-mongo";
-
 
 export type DbServiceMethods = {
 	seedDb?(): Promise<void>;
@@ -47,7 +44,7 @@ export default function (collection: string): DbServiceSchema {
 			 * @param {Context} ctx
 			 */
 			async entityChanged(type: string, json: any, ctx: Context): Promise<void> {
-				ctx.broadcast(cacheCleanEventName);
+				await ctx.broadcast(cacheCleanEventName);
 			},
 		},
 
@@ -56,7 +53,7 @@ export default function (collection: string): DbServiceSchema {
 			// call the `seedDB` method of the service.
 			if (this.seedDB) {
 				const count = await this.adapter.count();
-				if (count == 0) {
+				if (count === 0) {
 					this.logger.info(
 						`The '${collection}' collection is empty. Seeding the collection...`,
 					);
