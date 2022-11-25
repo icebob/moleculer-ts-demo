@@ -10,7 +10,8 @@
     "lint:fix": "cross-env TIMING=1 eslint . --ext cjs,mjs,js,jsx,ts,tsx --fix",
     "prettier": "prettier . --ignore-unknown --check",
     "prettier:fix": "prettier . --ignore-unknown --write",
-    "test": "concurrently npm:prettier npm:lint"
+    "test": "concurrently npm:prettier npm:lint",
+    "typecheck": "tsc --noEmit && echo \"tsc: no typecheck errors\""
   },
   "keywords": [],
   "author": "MoleculerJS",
