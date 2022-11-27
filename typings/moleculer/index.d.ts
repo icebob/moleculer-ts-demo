@@ -713,6 +713,8 @@ declare namespace Moleculer {
 		version?: string | number;
 	}
 
+	type StartedStoppedHandler = () => Promise<void> | void;
+
 	interface ServiceSchema<S = ServiceSettingSchema> {
 		name: string;
 		version?: string | number;
@@ -726,8 +728,8 @@ declare namespace Moleculer {
 
 		events?: ServiceEvents;
 		created?: (() => void) | (() => void)[];
-		started?: (() => Promise<void> | void) | (() => Promise<void> | void)[];
-		stopped?: (() => Promise<void> | void) | (() => Promise<void> | void)[];
+		started?: StartedStoppedHandler | StartedStoppedHandler[];
+		stopped?: StartedStoppedHandler | StartedStoppedHandler[];
 
 		[name: string]: any;
 	}
