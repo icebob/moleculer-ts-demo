@@ -138,7 +138,7 @@ module.exports = {
 
 	overrides: [
 		{
-			files: ["**/*.ts", "**/*.tsx"],
+			files: ["**/*.ts"],
 			extends: ["plugin:@typescript-eslint/recommended-requiring-type-checking"],
 			rules: {
 				// disable rules turned on by @typescript-eslint/recommended-requiring-type-checking which are too noisy
@@ -163,7 +163,7 @@ module.exports = {
 		},
 
 		{
-			files: ["**/index.ts", "**/index.tsx"],
+			files: ["**/index.ts"],
 			rules: {
 				// prefer named exports for certain file types
 				"import/prefer-default-export": "off",
@@ -222,6 +222,8 @@ module.exports = {
 
 				// prefer called with
 				"jest/prefer-called-with": "error",
+
+				"jest/no-conditional-expect": "off"
 			},
 		},
 
