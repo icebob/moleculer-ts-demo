@@ -19,7 +19,7 @@ module.exports = {
 		"node_modules",
 		"dist",
 		"coverage",
-		"**/*.d.ts",
+		// "**/*.d.ts",
 		"!.*.js",
 		"!.*.cjs",
 		"!.*.mjs",
@@ -152,7 +152,7 @@ module.exports = {
 				"@typescript-eslint/unbound-method": "off",
 
 				// force explicit member accessibility modifiers
-				"@typescript-eslint/explicit-member-accessibility": "error",
+				"@typescript-eslint/explicit-member-accessibility": ["error", { accessibility: "no-public" }],
 
 				// enforce return types on module boundaries
 				"@typescript-eslint/explicit-module-boundary-types": "error",
@@ -248,6 +248,20 @@ module.exports = {
 			rules: {
 				// allow requires in config files
 				"@typescript-eslint/no-var-requires": "off",
+			},
+		},
+
+		{
+			files: ["**/*.d.ts"],
+			rules: {
+				// allow tests to create multiple classes
+				"max-classes-per-file": "off",
+				"@typescript-eslint/naming-convention": "off",
+
+				"lines-between-class-members": "off",
+				"@typescript-eslint/lines-between-class-members": "off",
+				"@typescript-eslint/member-ordering": "off",
+				"@typescript-eslint/ban-types": "off"
 			},
 		},
 	],

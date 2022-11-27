@@ -1,6 +1,6 @@
 declare module "moleculer-db-adapter-mongo" {
-	import { DbAdapter } from "moleculer-db";
-	import { Collection } from "mongodb";
+	import type { DbAdapter } from "moleculer-db";
+	import type { Collection } from "mongodb";
 
 	export default class MongoDbAdapter implements DbAdapter {
 		collection: Collection;
@@ -62,7 +62,7 @@ declare module "moleculer-db-adapter-mongo" {
 		 * @returns {Promise}
 		 * @memberof DbAdapter
 		 */
-		findById(id: any): Promise<object>;
+		findById(id: unknown): Promise<object>;
 
 		/**
 		 * Find all entites by IDs
@@ -158,7 +158,7 @@ declare module "moleculer-db-adapter-mongo" {
 		 * @returns {Object}
 		 * @memberof DbAdapter
 		 */
-		entityToObject(entity: any): object;
+		entityToObject(entity: unknown): object;
 
 		/**
 		 * Add filters to query

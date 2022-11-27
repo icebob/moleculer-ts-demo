@@ -1,16 +1,16 @@
 declare module "moleculer-web" {
-	import {
+	import { IncomingMessage, ServerResponse } from "http";
+	import type {
 		ActionEndpoint,
 		ActionSchema,
 		CallingOptions,
 		Context,
-		Errors,
 		LogLevels,
 		Service,
 		ServiceBroker,
 		ServiceSchema,
 	} from "moleculer";
-	import { IncomingMessage, ServerResponse } from "http";
+	import { Errors } from "moleculer";
 
 	// RateLimit
 	export type generateRateLimitKey = (req: IncomingMessage) => string;
@@ -49,8 +49,8 @@ declare module "moleculer-web" {
 	}
 
 	export abstract class RateLimitStore {
-		public resetTime: number;
-		public constructor(clearPeriod: number, opts?: RateLimitSettings, broker?: ServiceBroker);
+		resetTime: number;
+		constructor(clearPeriod: number, opts?: RateLimitSettings, broker?: ServiceBroker);
 		inc(key: string): number | Promise<number>;
 	}
 
@@ -351,7 +351,7 @@ declare module "moleculer-web" {
 		type: string;
 		method: string;
 		path: string;
-		handler: null | Array<Function>;
+		handler: null | Function[];
 		action: string;
 	}
 
@@ -362,12 +362,12 @@ declare module "moleculer-web" {
 		hasWhitelist: boolean;
 		logging: boolean;
 		mappingPolicy: string;
-		middlewares: Array<Function>;
+		middlewares: Function[];
 		onBeforeCall?: onBeforeCall;
 		onAfterCall?: onAfterCall;
 		opts: any;
 		path: string;
-		whitelist: Array<string>;
+		whitelist: string[];
 	}
 
 	type onBeforeCall = (
@@ -480,7 +480,7 @@ declare module "moleculer-web" {
 		 * @see https://moleculer.services/docs/0.14/moleculer-web.html#Aliases
 		 */
 		aliases?: {
-			[k: string]: string | AliasFunction | Array<AliasFunction | string> | AliasRouteSchema;
+			[k: string]: string | AliasFunction | (AliasFunction | string)[] | AliasRouteSchema;
 		};
 		/**
 		 * To enable the support for authentication, you need to do something similar to what is describe in the Authorization paragraph.<br>
@@ -589,7 +589,7 @@ declare module "moleculer-web" {
 		 * /^math\.\w+$/: `Access any actions in 'math' service`<br>
 		 * @see https://moleculer.services/docs/0.14/moleculer-web.html#Whitelist
 		 */
-		whitelist?: Array<string | RegExp>;
+		whitelist?: (string | RegExp)[];
 	};
 
 	export type ApiSettingsSchema = CommonSettingSchema & {
@@ -711,7 +711,7 @@ declare module "moleculer-web" {
 		$params: any;
 		$route: Route;
 		$service: Service;
-		$startTime: Array<number>;
+		$startTime: number[];
 	}
 
 	export class GatewayResponse extends ServerResponse {
