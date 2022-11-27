@@ -13,19 +13,18 @@ export interface ProductEntity {
 
 export type ActionCreateParams = Partial<ProductEntity>;
 
-export type ActionQuantityParams = {
+export interface ActionQuantityParams {
 	id: string;
 	value: number;
-};
+}
 
-type ProductSettings = DbServiceSettings & {
+interface ProductSettings extends DbServiceSettings {
 	indexes?: Record<string, number>[];
-};
+}
 
-type ProductsThis = Service<ProductSettings> &
-	MoleculerDbMethods & {
-		adapter: DbAdapter | MongoDbAdapter;
-	};
+interface ProductsThis extends Service<ProductSettings>, MoleculerDbMethods {
+	adapter: DbAdapter | MongoDbAdapter;
+}
 
 const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMethods } = {
 	name: "products",

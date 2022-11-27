@@ -1,20 +1,20 @@
 import type { Context, Service, ServiceSchema } from "moleculer";
 
-export type ActionHelloParams = {
+export interface ActionHelloParams {
 	name: string;
-};
+}
 
-type GreeterSettings = {
+interface GreeterSettings {
 	defaultName: string;
-};
+}
 
-type GreeterMethods = {
+interface GreeterMethods {
 	uppercase(str: string): string;
-};
+}
 
-type GreeterLocalVars = {
+interface GreeterLocalVars {
 	myVar: string;
-};
+}
 
 type GreeterThis = Service<GreeterSettings> & GreeterMethods & GreeterLocalVars;
 
