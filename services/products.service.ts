@@ -4,9 +4,15 @@ import type MongoDbAdapter from "moleculer-db-adapter-mongo";
 import type { DbServiceMethods } from "../mixins/db.mixin";
 import DbMixin from "../mixins/db.mixin";
 
-export type ActionCreateParams = {
-	quantity?: number;
-};
+export interface ProductEntity {
+	_id: string;
+	name: string;
+	price: number;
+	quantity: number;
+}
+
+export type ActionCreateParams = Partial<ProductEntity>;
+
 export type ActionQuantityParams = {
 	id: string;
 	value: number;
