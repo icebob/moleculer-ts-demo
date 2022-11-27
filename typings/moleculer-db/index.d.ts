@@ -720,6 +720,6 @@ declare module "moleculer-db" {
 	export default class DbService<
 		S extends DbServiceSettings = DbServiceSettings,
 	> extends Service<S> {
-		static MemoryAdapter: MemoryDbAdapter;
+		static MemoryAdapter: MemoryAdapter;
 	}
 }
